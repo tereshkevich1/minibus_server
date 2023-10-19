@@ -2,8 +2,6 @@ package com.example.routes
 
 import com.example.dao.daoCityImpl
 import com.example.model.City
-import com.example.model.Customer
-import com.example.model.customerStorage
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
@@ -14,7 +12,7 @@ import io.ktor.server.util.*
 fun Route.citiesRouting() {
     route("/city") {
         get {
-            call.respond(mapOf("cities" to daoCityImpl.allCities()))
+            call.respond(daoCityImpl.allCities())
         }
         get("/{id}") {
 

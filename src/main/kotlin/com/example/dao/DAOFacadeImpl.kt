@@ -2,12 +2,9 @@ package com.example.dao
 
 import com.example.dao.DatabaseFactory.dbQuery
 import com.example.model.Article
-
 import com.example.model.Articles
 import com.example.model.RoutD
 import com.example.model.Routes
-
-import kotlinx.coroutines.runBlocking
 import org.jetbrains.exposed.sql.*
 
 class DAOFacadeImpl : DAOFacade {

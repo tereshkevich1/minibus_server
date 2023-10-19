@@ -7,9 +7,6 @@ import org.jetbrains.exposed.sql.Table
 @Serializable
 data class Article(val id: Int, val title: String, val body: String)
 
-@Serializable
-data class Art(val title: String, val body: String)
-
 object Articles : Table("article_table") {
     val id = integer("id").autoIncrement()
     val title = varchar("title", 128)

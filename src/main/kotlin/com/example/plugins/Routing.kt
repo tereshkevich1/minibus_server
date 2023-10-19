@@ -3,7 +3,6 @@ package com.example.plugins
 import com.example.dao.addNewRoute
 import com.example.dao.dao
 import com.example.dao.selRoutes
-import com.example.model.Art
 import com.example.model.Article
 import com.example.model.RoutD
 import com.example.routes.citiesRouting
