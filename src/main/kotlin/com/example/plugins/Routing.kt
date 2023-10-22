@@ -7,6 +7,7 @@ import com.example.model.Article
 import com.example.model.RoutD
 import com.example.routes.citiesRouting
 import com.example.routes.customerRouting
+import com.example.routes.tripsRouting
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
@@ -22,6 +23,7 @@ fun Application.configureRouting() {
     routing {
         citiesRouting()
         customerRouting()
+        tripsRouting()
         route("/art"){
 
             get {

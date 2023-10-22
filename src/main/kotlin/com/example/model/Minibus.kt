@@ -10,15 +10,15 @@ data class Minibus(
     val number: String,
     val color: String,
     val numberOfSeats: Int,
-    val name: String
+    val carId: Int
 )
 
 object Minibuses : Table("minibuses") {
     val id = integer("id").autoIncrement()
-    val number = varchar("number", 10)
+    val number = varchar("number", 15)
     val color = varchar("color", 20)
     val numberOfSeats = integer("number_of_seats")
-    val name = varchar("name",30)
+    val carId = integer("car_id")
 
     override val primaryKey = PrimaryKey(id)
 }
