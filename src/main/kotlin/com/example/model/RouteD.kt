@@ -7,17 +7,15 @@ import org.jetbrains.exposed.sql.Table
 @Serializable
 data class RoutD(
     val id: Int,
-    val startingLocation: String,
-    val finalLocation: String,
-    val distance: Int,
+    val startingLocationId: Int,
+    val finalLocationId: Int,
     val duration: Int
 )
 
 object Routes : Table("routes") {
     val id = integer("id").autoIncrement()
-    val startingLocation = varchar("starting_location", 30)
-    val finalLocation = varchar("final_location", 30)
-    val distance = integer("distance")
+    val startingLocationId = integer("starting_location_id") references (Cities.id)
+    val finalLocationId = integer("final_location_id")  references (Cities.id)
     val duration = integer("duration")
 
     override val primaryKey = PrimaryKey(id)

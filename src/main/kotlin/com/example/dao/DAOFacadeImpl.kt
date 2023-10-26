@@ -43,28 +43,26 @@ class DAOFacadeImpl : DAOFacade {
 
 private fun resultRowToRoute(row: ResultRow) = RoutD(
     id = row[Routes.id],
-    startingLocation = row[Routes.startingLocation],
-    finalLocation = row[Routes.finalLocation],
-    distance = row[Routes.distance],
+    startingLocationId = row[Routes.startingLocationId],
+    finalLocationId = row[Routes.finalLocationId],
     duration = row[Routes.duration]
 )
 
-suspend fun addNewRoute(startingLocation: String, finalLocation: String, distance: Int, duration: Int): RoutD? =
+suspend fun addNewRoute(startingLocationId: Int, finalLocationId: Int, duration: Int): RoutD? =
     dbQuery {
         val insertStatement = Routes.insert {
-            it[Routes.startingLocation] = startingLocation
-            it[Routes.finalLocation] = finalLocation
-            it[Routes.distance] = distance
+            it[Routes.startingLocationId] = startingLocationId
+            it[Routes.finalLocationId] = finalLocationId
             it[Routes.duration] = duration
         }
         insertStatement.resultedValues?.singleOrNull()?.let(::resultRowToRoute)
     }
 
 // Routes.select{(Routes.startingLocation eq start) and (Routes.finalLocation eq final)}.map(::resultRowToRoute)
-suspend fun selRoutes(start: String, final: String): List<RoutD> = dbQuery {
+suspend fun selRoutes(start: Int, final: Int): List<RoutD> = dbQuery {
 
     //Routes.selectAll().map(::resultRowToRoute)
-    Routes.select { (Routes.startingLocation eq start) and (Routes.finalLocation eq final) }.map(::resultRowToRoute)
+    Routes.select { (Routes.startingLocationId eq start) and (Routes.finalLocationId eq final) }.map(::resultRowToRoute)
 }
 
 

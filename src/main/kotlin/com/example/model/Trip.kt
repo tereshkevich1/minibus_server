@@ -23,10 +23,10 @@ data class Trip(
 
 object Trips : Table("trips") {
     val id = integer("id").autoIncrement()
-    val minibusId = integer("minibus_id")
-    val driverId = integer("driver_id")
-    val routeId = integer("route_id")
-    val timeId = integer("time_id")
+    val minibusId = integer("minibus_id") references (Minibuses.id)
+    val driverId = integer("driver_id") references (Drivers.id)
+    val routeId = integer("route_id") references (Routes.id)
+    val timeId = integer("time_id") references (TimeTable.id)
     val price =  integer("price")
     val numberAvailableSeats = integer("number_available_seats")
     val departureDate = date("departure_date")

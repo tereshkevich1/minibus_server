@@ -12,7 +12,10 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
+
+
 import java.time.LocalDate
+import java.time.LocalTime
 
 fun Application.configureSerialization() {
     install(ContentNegotiation) {
@@ -20,6 +23,7 @@ fun Application.configureSerialization() {
         json(Json {
             serializersModule = SerializersModule {
                 contextual(LocalDate::class, LocalDateSerializer)
+                contextual(LocalTime::class, LocalTimeSerializer)
             }
         })
     }
@@ -39,5 +43,17 @@ object LocalDateSerializer : KSerializer<LocalDate> {
 
     override fun deserialize(decoder: Decoder): LocalDate {
         return LocalDate.parse(decoder.decodeString())
+    }
+}
+
+@OptIn(ExperimentalSerializationApi::class)
+@Serializer(forClass = LocalTime::class)
+object LocalTimeSerializer : KSerializer<LocalTime> {
+    override fun serialize(encoder: Encoder, value: LocalTime) {
+        encoder.encodeString(value.toString())
+    }
+
+    override fun deserialize(decoder: Decoder): LocalTime {
+        return LocalTime.parse(decoder.decodeString())
     }
 }

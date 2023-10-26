@@ -6,7 +6,7 @@ import com.example.model.City
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 
-class DAOCityImpl : DAOCity {
+class DAOCityImpl : CityDAO {
 
     private fun resultRowToCity(row: ResultRow) = City(
         id = row[Cities.id],
@@ -39,4 +39,4 @@ class DAOCityImpl : DAOCity {
 }
 
 
-val daoCityImpl: DAOCity = DAOCityImpl()
+val daoCityImpl: CityDAO = DAOCityImpl()

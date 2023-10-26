@@ -18,7 +18,7 @@ object Minibuses : Table("minibuses") {
     val number = varchar("number", 15)
     val color = varchar("color", 20)
     val numberOfSeats = integer("number_of_seats")
-    val carId = integer("car_id")
+    val carId = integer("car_id") //  references (CarsName.id)
 
     override val primaryKey = PrimaryKey(id)
 }

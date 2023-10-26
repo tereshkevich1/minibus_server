@@ -6,13 +6,14 @@ import com.example.dao.selRoutes
 import com.example.model.Article
 import com.example.model.RoutD
 import com.example.routes.citiesRouting
-import com.example.routes.customerRouting
+import com.example.routes.timeRouting
 import com.example.routes.tripsRouting
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import io.ktor.server.util.*
 
 fun Application.configureRouting() {
     routing {
@@ -22,8 +23,8 @@ fun Application.configureRouting() {
     }
     routing {
         citiesRouting()
-        customerRouting()
         tripsRouting()
+        timeRouting()
         route("/art"){
 
             get {
@@ -42,16 +43,15 @@ fun Application.configureRouting() {
         route("/route"){
             post{
                 val route = call.receive<RoutD>()
-                val start = route.startingLocation
-                val final = route.finalLocation
-                val distance = route.distance
+                val start = route.startingLocationId
+                val final = route.finalLocationId
                 val duration = route.duration
-                addNewRoute(start,final,distance,duration)
+                addNewRoute(start,final,duration)
                 call.respondText("Route stored correctly", status = HttpStatusCode.Created)
             }
             get("/user/{start}/{final}") {
-                val start = call.parameters["start"].toString()
-                val final = call.parameters["final"].toString()
+                val start = call.parameters.getOrFail<Int>("start").toInt()
+                val final = call.parameters.getOrFail<Int>("final").toInt()
                 call.respond(mapOf("routes" to  selRoutes(start,final)))
             }
         }

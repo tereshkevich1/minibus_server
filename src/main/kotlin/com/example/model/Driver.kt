@@ -12,7 +12,7 @@ data class Driver(
 
 object Drivers: Table("drivers"){
     val id = integer("id").autoIncrement()
-    val userId = integer("user_id")
+    val userId = integer("user_id") references (Users.id)
     val driverLicenseNumber = integer("driver_license_number")
     override val primaryKey = PrimaryKey(id)
 }
