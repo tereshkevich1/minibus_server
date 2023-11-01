@@ -1,11 +1,10 @@
 package com.example.plugins
 
-import com.example.dao.addNewRoute
-import com.example.dao.dao
-import com.example.dao.selRoutes
+import com.example.dao.*
 import com.example.model.Article
 import com.example.model.RoutD
 import com.example.routes.citiesRouting
+import com.example.routes.driverRouting
 import com.example.routes.timeRouting
 import com.example.routes.tripsRouting
 import io.ktor.http.*
@@ -25,7 +24,8 @@ fun Application.configureRouting() {
         citiesRouting()
         tripsRouting()
         timeRouting()
-        route("/art"){
+        driverRouting()
+        route("/art") {
 
             get {
                 call.respond(mapOf("articles" to dao.allArticles()))
@@ -40,19 +40,19 @@ fun Application.configureRouting() {
                 call.respondText("Customer stored correctly $body, $title", status = HttpStatusCode.Created)
             }
         }
-        route("/route"){
-            post{
+        route("/route") {
+            post {
                 val route = call.receive<RoutD>()
                 val start = route.startingLocationId
                 val final = route.finalLocationId
                 val duration = route.duration
-                addNewRoute(start,final,duration)
+                daoRoute.addNewRoute(start, final)
                 call.respondText("Route stored correctly", status = HttpStatusCode.Created)
             }
             get("/user/{start}/{final}") {
                 val start = call.parameters.getOrFail<Int>("start").toInt()
                 val final = call.parameters.getOrFail<Int>("final").toInt()
-                call.respond(mapOf("routes" to  selRoutes(start,final)))
+                call.respond(mapOf("routes" to daoRoute.route(start, final)))
             }
         }
 

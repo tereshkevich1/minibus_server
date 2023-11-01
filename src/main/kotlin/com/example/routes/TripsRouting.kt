@@ -1,5 +1,6 @@
 package com.example.routes
 
+import com.example.dao.daoRoute
 import com.example.dao.daoTrip
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -12,8 +13,18 @@ import java.time.format.DateTimeParseException
 fun Route.tripsRouting() {
     route("/trip") {
         get {
-           // call.respond(daoCityImpl.allCities())
+            // call.respond(daoCityImpl.allCities())
             call.respond(daoTrip.allTrips())
+        }
+        get("/{id}") {
+            val id = call.parameters.getOrFail<Int>("id").toInt()
+            val trip = daoTrip.tripById(id)
+            if (trip != null) {
+                call.respond(trip)
+            } else {
+                call.respond(HttpStatusCode.NotFound, "TRIP NOT FOUND")
+            }
+
         }
         get("/{startingLocationId}/{finalLocationId}/{departureDate}") {
             val start = call.parameters.getOrFail<Int>("startingLocationId").toInt()
@@ -29,8 +40,20 @@ fun Route.tripsRouting() {
             }
 
 
+            var route = daoRoute.route(startingLocationId = start, finalLocationId = final)
+            if (route == null) {
+                route = daoRoute.addNewRoute(start, final)
+            }
+
+
+            for (i in 1..5) {
+                daoTrip.addNewTrip((1..5).random(), (1..4).random(), route!!.id, (1..5).random(), 27, 15, departureDate)
+            }
+
+
             val trips = daoTrip.trip(departureDate, start, final)
-            call.respond(trips ?: emptyList())
+            call.respond(trips?.sortedBy { it.departureTime } ?: emptyList())
+
 
         }
     }

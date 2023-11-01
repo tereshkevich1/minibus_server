@@ -2,10 +2,7 @@ package com.example.dao
 
 import com.example.dao.DatabaseFactory.dbQuery
 import com.example.model.*
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.*
 import java.time.LocalDate
 import java.util.*
 
@@ -74,22 +71,40 @@ class DAOTripImpl : TripDAO {
         } else null
     }
 
-    override suspend fun addNewTrip(name: String): Trip? {
-        TODO("Not yet implemented")
+    override suspend fun tripById(id: Int): Trip? = dbQuery {
+        Trips.select{Trips.id eq id}.singleOrNull()?.let(::resultRowToTrip)
     }
 
-    override suspend fun editTrip(id: Int, name: String): Boolean {
-        TODO("Not yet implemented")
+    override suspend fun addNewTrip(
+        minibusId: Int, driverId: Int, routeId: Int, timeId: Int, price: Int, numberAvailableSeats: Int,
+        departureDate: LocalDate
+    ): Trip? = dbQuery {
+
+    val insertStatement = Trips.insert {
+        it[Trips.driverId] = driverId
+        it[Trips.minibusId] = minibusId
+        it[Trips.routeId] = routeId
+        it[Trips.timeId] = timeId
+        it[Trips.price] = price
+        it[Trips.numberAvailableSeats] = numberAvailableSeats
+        it[Trips.departureDate] = departureDate
     }
 
-    override suspend fun deleteTrip(id: Int): Boolean {
-        TODO("Not yet implemented")
-    }
+    insertStatement.resultedValues?.singleOrNull()?.let(::resultRowToTrip)
+}
 
-    override suspend fun searchTrip(departureDate: Date, routeId: Int): List<Trip> {
+override suspend fun editTrip(id: Int, name: String): Boolean {
+    TODO("Not yet implemented")
+}
 
-        TODO("Not yet implemented")
-    }
+override suspend fun deleteTrip(id: Int): Boolean {
+    TODO("Not yet implemented")
+}
+
+override suspend fun searchTrip(departureDate: Date, routeId: Int): List<Trip> {
+
+    TODO("Not yet implemented")
+}
 }
 
 val daoTrip: TripDAO = DAOTripImpl()

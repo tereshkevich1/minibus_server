@@ -6,13 +6,11 @@ import org.jetbrains.exposed.sql.Table
 @Serializable
 data class Driver(
     val id: Int,
-    val userId: Int,
     val driverLicenseNumber: Int
 )
 
 object Drivers: Table("drivers"){
-    val id = integer("id").autoIncrement()
-    val userId = integer("user_id") references (Users.id)
+    val id = integer("id")  references (Users.id)
     val driverLicenseNumber = integer("driver_license_number")
     override val primaryKey = PrimaryKey(id)
 }

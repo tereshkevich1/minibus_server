@@ -48,22 +48,7 @@ private fun resultRowToRoute(row: ResultRow) = RoutD(
     duration = row[Routes.duration]
 )
 
-suspend fun addNewRoute(startingLocationId: Int, finalLocationId: Int, duration: Int): RoutD? =
-    dbQuery {
-        val insertStatement = Routes.insert {
-            it[Routes.startingLocationId] = startingLocationId
-            it[Routes.finalLocationId] = finalLocationId
-            it[Routes.duration] = duration
-        }
-        insertStatement.resultedValues?.singleOrNull()?.let(::resultRowToRoute)
-    }
 
-// Routes.select{(Routes.startingLocation eq start) and (Routes.finalLocation eq final)}.map(::resultRowToRoute)
-suspend fun selRoutes(start: Int, final: Int): List<RoutD> = dbQuery {
-
-    //Routes.selectAll().map(::resultRowToRoute)
-    Routes.select { (Routes.startingLocationId eq start) and (Routes.finalLocationId eq final) }.map(::resultRowToRoute)
-}
 
 
 val dao: DAOFacade = DAOFacadeImpl()
