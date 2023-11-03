@@ -47,7 +47,7 @@ fun Route.tripsRouting() {
 
 
             for (i in 1..5) {
-                daoTrip.addNewTrip((1..5).random(), (1..4).random(), route!!.id, (1..5).random(), 27, 15, departureDate)
+                daoTrip.addNewTrip((1..5).random(), (1..4).random(), route!!.id, (1..5).random(), 27,  (1..15).random(), departureDate)
             }
 
 

@@ -4,6 +4,7 @@ import com.example.dao.DatabaseFactory.dbQuery
 import com.example.model.Time
 import com.example.model.TimeTable
 import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 
 class DAOTimeImpl : TimeDAO {
@@ -17,8 +18,8 @@ class DAOTimeImpl : TimeDAO {
         TimeTable.selectAll().map(::resultRowToTime)
     }
 
-    override suspend fun time(id: Int): Time? {
-        TODO("Not yet implemented")
+    override suspend fun time(id: Int): Time? = dbQuery {
+        TimeTable.select { TimeTable.id eq id }.singleOrNull()?.let(::resultRowToTime)
     }
 
     override suspend fun addNewTime(name: String): Time? {
@@ -33,4 +34,5 @@ class DAOTimeImpl : TimeDAO {
         TODO("Not yet implemented")
     }
 }
+
 val daoTime: TimeDAO = DAOTimeImpl()

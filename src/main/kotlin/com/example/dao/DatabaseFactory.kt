@@ -13,9 +13,6 @@ object DatabaseFactory {
         val password = "admin"
         val userName = "postgres"
         val database = Database.connect(jdbcURL, driverClassName, password = password, user = userName)
-        transaction(database) {
-            SchemaUtils.create(Articles)
-        }
     }
 
     suspend fun <T> dbQuery(block: suspend () -> T): T =
