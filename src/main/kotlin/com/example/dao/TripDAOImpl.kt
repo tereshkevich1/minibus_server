@@ -6,19 +6,19 @@ import org.jetbrains.exposed.sql.*
 import java.time.LocalDate
 import java.util.*
 
+fun resultRowToTrip(row: ResultRow) = Trip(
+
+    id = row[Trips.id],
+    minibusId = row[Trips.minibusId],
+    driverId = row[Trips.driverId],
+    routeId = row[Trips.routeId],
+    timeId = row[Trips.timeId],
+    price = row[Trips.price],
+    numberAvailableSeats = row[Trips.numberAvailableSeats],
+    departureDate = row[Trips.departureDate],
+)
 
 class DAOTripImpl : TripDAO {
-    private fun resultRowToTrip(row: ResultRow) = Trip(
-
-        id = row[Trips.id],
-        minibusId = row[Trips.minibusId],
-        driverId = row[Trips.driverId],
-        routeId = row[Trips.routeId],
-        timeId = row[Trips.timeId],
-        price = row[Trips.price],
-        numberAvailableSeats = row[Trips.numberAvailableSeats],
-        departureDate = row[Trips.departureDate],
-    )
 
     private fun resultRowToRote(row: ResultRow) = RoutD(
         id = row[Routes.id],
@@ -72,7 +72,7 @@ class DAOTripImpl : TripDAO {
     }
 
     override suspend fun tripById(id: Int): Trip? = dbQuery {
-        Trips.select{Trips.id eq id}.singleOrNull()?.let(::resultRowToTrip)
+        Trips.select { Trips.id eq id }.singleOrNull()?.let(::resultRowToTrip)
     }
 
     override suspend fun addNewTrip(
@@ -80,31 +80,31 @@ class DAOTripImpl : TripDAO {
         departureDate: LocalDate
     ): Trip? = dbQuery {
 
-    val insertStatement = Trips.insert {
-        it[Trips.driverId] = driverId
-        it[Trips.minibusId] = minibusId
-        it[Trips.routeId] = routeId
-        it[Trips.timeId] = timeId
-        it[Trips.price] = price
-        it[Trips.numberAvailableSeats] = numberAvailableSeats
-        it[Trips.departureDate] = departureDate
+        val insertStatement = Trips.insert {
+            it[Trips.driverId] = driverId
+            it[Trips.minibusId] = minibusId
+            it[Trips.routeId] = routeId
+            it[Trips.timeId] = timeId
+            it[Trips.price] = price
+            it[Trips.numberAvailableSeats] = numberAvailableSeats
+            it[Trips.departureDate] = departureDate
+        }
+
+        insertStatement.resultedValues?.singleOrNull()?.let(::resultRowToTrip)
     }
 
-    insertStatement.resultedValues?.singleOrNull()?.let(::resultRowToTrip)
-}
+    override suspend fun editTrip(id: Int, name: String): Boolean {
+        TODO("Not yet implemented")
+    }
 
-override suspend fun editTrip(id: Int, name: String): Boolean {
-    TODO("Not yet implemented")
-}
+    override suspend fun deleteTrip(id: Int): Boolean {
+        TODO("Not yet implemented")
+    }
 
-override suspend fun deleteTrip(id: Int): Boolean {
-    TODO("Not yet implemented")
-}
+    override suspend fun searchTrip(departureDate: Date, routeId: Int): List<Trip> {
 
-override suspend fun searchTrip(departureDate: Date, routeId: Int): List<Trip> {
-
-    TODO("Not yet implemented")
-}
+        TODO("Not yet implemented")
+    }
 }
 
 val daoTrip: TripDAO = DAOTripImpl()

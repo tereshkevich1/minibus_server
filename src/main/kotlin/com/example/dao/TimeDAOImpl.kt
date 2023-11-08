@@ -7,13 +7,12 @@ import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 
+fun resultRowToTime(row: ResultRow) = Time(
+    id = row[TimeTable.id],
+    departureTime = row[TimeTable.departureTime],
+    arrivalTime = row[TimeTable.arrivalTime]
+)
 class DAOTimeImpl : TimeDAO {
-    private fun resultRowToTime(row: ResultRow) = Time(
-        id = row[TimeTable.id],
-        departureTime = row[TimeTable.departureTime],
-        arrivalTime = row[TimeTable.arrivalTime]
-    )
-
     override suspend fun allTime(): List<Time> = dbQuery {
         TimeTable.selectAll().map(::resultRowToTime)
     }

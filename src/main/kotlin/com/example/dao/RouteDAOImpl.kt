@@ -8,14 +8,14 @@ import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 
-class RouteDAOImpl : RouteDAO {
+fun resultRowToRoute(row: ResultRow) = RoutD(
+    id = row[Routes.id],
+    startingLocationId = row[Routes.startingLocationId],
+    finalLocationId = row[Routes.finalLocationId],
+    duration = row[Routes.duration]
+)
 
-    private fun resultRowToRoute(row: ResultRow) = RoutD(
-        id = row[Routes.id],
-        startingLocationId = row[Routes.startingLocationId],
-        finalLocationId = row[Routes.finalLocationId],
-        duration = row[Routes.duration]
-    )
+class RouteDAOImpl : RouteDAO {
 
     override suspend fun allRoutes(): List<RoutD> {
         TODO("Not yet implemented")

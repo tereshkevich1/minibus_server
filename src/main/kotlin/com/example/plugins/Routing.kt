@@ -19,5 +19,6 @@ fun Application.configureRouting() {
         driverRouting()
         orderDetailsRouting()
         stopPointRouting()
+        userHistoryRouting()
     }
 }
