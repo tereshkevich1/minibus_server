@@ -1,6 +1,7 @@
 package com.example.dao
 
 import com.example.model.Order
+import com.example.model.Transport
 import com.example.model.UserTravelHistory
 
 
@@ -35,5 +36,7 @@ interface HistoryDAO {
     suspend fun deleteOrder(id: Int): Boolean
 
     suspend fun getUserTravelHistory(userId: Int): List<UserTravelHistory>
+
+    suspend fun getTransport(minibusId: Int): Transport?
 }
 

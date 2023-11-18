@@ -6,18 +6,18 @@ import org.jetbrains.exposed.sql.Table
 @Serializable
 data class Bus (
     val id: Int,
-    val carColor: String,
-    val numberSeats: Int,
-    val carName: String,
-    val carNumber: String
+    val carNumber: String,
+    val carId: Int,
+    val yearOfManufacture: Int,
+    val carColor: String
 )
 
 object Buses: Table("minibuses"){
     val id = integer("id").autoIncrement()
-    val carName = varchar("car_name",50)
     val carNumber = varchar("number",15)
+    val carId = integer("car_id") references (Cars.id)
+    val yearOfManufacture = integer("year_of_manufacture")
     val carColor = varchar("color",20)
-    val numberSeats = integer("number_of_seats")
 
     override val primaryKey = PrimaryKey(id)
 }

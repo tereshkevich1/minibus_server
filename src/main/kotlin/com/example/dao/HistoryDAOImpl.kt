@@ -17,6 +17,11 @@ class HistoryDAOImpl : HistoryDAO {
 
     )
 
+    private fun resultRowToTransport(row: ResultRow) = Transport(
+        bus = resultRowToBus(row),
+        car = resultRowToCar(row)
+    )
+
     override suspend fun allOrders(): List<Order> {
         TODO("Not yet implemented")
     }
@@ -92,6 +97,11 @@ class HistoryDAOImpl : HistoryDAO {
                     arrivalPoint = resultRow[arrivalPoints[StoppingPoints.name]],
                 )
             }
+    }
+
+    override suspend fun getTransport(minibusId: Int): Transport? = dbQuery {
+        (Buses innerJoin Cars).select { Buses.carId eq Cars.id }.andWhere { Buses.id eq minibusId }.singleOrNull()
+            ?.let(::resultRowToTransport)
     }
 }
 

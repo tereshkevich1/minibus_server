@@ -8,7 +8,7 @@ data class User(
     val id: Int,
     val firstName: String,
     val lastName: String,
-    val number: String,
+    val phoneNumber: String,
     val role: Boolean
 )
 
@@ -17,7 +17,7 @@ object Users: Table("users"){
     val id = integer("id").autoIncrement()
     val firstName = varchar("first_name", 30)
     val lastName = varchar("last_name", 30)
-    val number = varchar("number", 30)
+    val phoneNumber = varchar("phone_number", 30)
     val role = bool("role")
 
     override val primaryKey = PrimaryKey(id)

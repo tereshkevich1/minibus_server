@@ -38,7 +38,7 @@ fun Route.userHistoryRouting() {
             }
         }*/
 
-        get("/{user_id}"){
+        get("/{user_id}") {
             val userId = call.parameters.getOrFail<Int>("user_id").toInt()
             val userTravelHistoryList = daoOrder.getUserTravelHistory(userId)
 
@@ -47,6 +47,21 @@ fun Route.userHistoryRouting() {
                 call.respond(HttpStatusCode.NotFound, "No travel history found for user.")
             } else {
                 call.respond(userTravelHistoryList)
+            }
+        }
+    }
+
+    route("/transport") {
+        get("/{minibus_id}") {
+            val minibusId = call.parameters.getOrFail<Int>("minibus_id").toInt()
+
+            val transport = daoOrder.getTransport(minibusId)
+
+            // Respond with the list or an error if it's empty
+            if (transport == null) {
+                call.respond(HttpStatusCode.NotFound, "No travel history found for user.")
+            } else {
+                call.respond(transport)
             }
         }
     }
