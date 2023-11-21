@@ -18,8 +18,7 @@ class HistoryDAOImpl : HistoryDAO {
     )
 
     private fun resultRowToTransport(row: ResultRow) = Transport(
-        bus = resultRowToBus(row),
-        car = resultRowToCar(row)
+        bus = resultRowToBus(row), car = resultRowToCar(row)
     )
 
     override suspend fun allOrders(): List<Order> {
@@ -31,12 +30,7 @@ class HistoryDAOImpl : HistoryDAO {
     }
 
     override suspend fun addNewOrder(
-        status: Int,
-        numberTickets: Int,
-        userId: Int,
-        tripId: Int,
-        departureStopId: Int,
-        arrivalStopId: Int
+        status: Int, numberTickets: Int, userId: Int, tripId: Int, departureStopId: Int, arrivalStopId: Int
     ): Order? = dbQuery {
         val insertStatement = Orders.insert {
             it[Orders.status] = status
@@ -50,13 +44,7 @@ class HistoryDAOImpl : HistoryDAO {
     }
 
     override suspend fun editOrder(
-        id: Int,
-        status: Int,
-        numberTickets: Int,
-        userId: Int,
-        tripId: Int,
-        departureStopId: Int,
-        arrivalStopId: Int
+        id: Int, status: Int, numberTickets: Int, userId: Int, tripId: Int, departureStopId: Int, arrivalStopId: Int
     ): Boolean {
         TODO("Not yet implemented")
     }
@@ -77,15 +65,15 @@ class HistoryDAOImpl : HistoryDAO {
         val departurePoints = StoppingPoints.alias("departurePoints")
         val arrivalPoints = StoppingPoints.alias("arrivalPoints")
 
-        (Orders innerJoin Trips innerJoin TimeTable innerJoin Routes)
-            .innerJoin(departureCities, { Routes.startingLocationId }, { departureCities[Cities.id] })
+        (Orders innerJoin Trips innerJoin TimeTable innerJoin Routes).innerJoin(
+            departureCities,
+            { Routes.startingLocationId },
+            { departureCities[Cities.id] })
             .innerJoin(arrivalCities, { Routes.finalLocationId }, { arrivalCities[Cities.id] })
             .innerJoin(departurePoints, { Orders.departureStopId }, { departurePoints[StoppingPoints.id] })
             .innerJoin(arrivalPoints, { Orders.arrivalStopId }, { arrivalPoints[StoppingPoints.id] })
-            .select { Orders.userId eq userId }
-            .andWhere { Trips.timeId eq TimeTable.id }
-            .andWhere { Trips.routeId eq Routes.id }
-            .map { resultRow ->
+            .select { Orders.userId eq userId }.andWhere { Trips.timeId eq TimeTable.id }
+            .andWhere { Trips.routeId eq Routes.id }.map { resultRow ->
                 UserTravelHistory(
                     order = resultRowToOrder(resultRow),
                     trip = resultRowToTrip(resultRow),
@@ -97,6 +85,7 @@ class HistoryDAOImpl : HistoryDAO {
                     arrivalPoint = resultRow[arrivalPoints[StoppingPoints.name]],
                 )
             }
+
     }
 
     override suspend fun getTransport(minibusId: Int): Transport? = dbQuery {
@@ -105,4 +94,4 @@ class HistoryDAOImpl : HistoryDAO {
     }
 }
 
-val daoOrder: HistoryDAO = HistoryDAOImpl()
+val daoHistory: HistoryDAO = HistoryDAOImpl()

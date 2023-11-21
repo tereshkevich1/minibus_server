@@ -21,5 +21,6 @@ fun Application.configureRouting() {
         stopPointRouting()
         userHistoryRouting()
         userRouting()
+        orderRouting()
     }
 }
