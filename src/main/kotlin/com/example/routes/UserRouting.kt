@@ -31,19 +31,20 @@ fun Route.userRouting() {
             }
         }
 
-        post("{firstName}/{lastName}/{phoneNumber}/addNewUser") {
+        post("{firstName}/{lastName}/{phoneNumber}/{password}/addNewUser") {
             try {
                 val firstName = call.parameters.getOrFail("firstName")
                 val lastName = call.parameters.getOrFail("lastName")
+                val password = call.parameters.getOrFail("password")
 
                 val phoneNumber = call.parameters.getOrFail("phoneNumber").let { number ->
                     if (number.startsWith("+")) number else "+$number"
                 }
 
-                val user = daoUser.addNewUser(firstName, lastName, phoneNumber, false)
+                val user = daoUser.addNewUser(firstName, lastName, phoneNumber, false, password)
 
                 if (user != null) {
-                    call.respond(HttpStatusCode.OK, "User added, id: ${user.id}")
+                    call.respond(user.id)
                 } else {
                     call.respond(HttpStatusCode.Conflict, "Create failed")
                 }

@@ -1,6 +1,5 @@
 package com.example.routes
 
-import com.example.dao.daoRoute
 import com.example.dao.daoTrip
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -40,15 +39,16 @@ fun Route.tripsRouting() {
             }
 
 
+            /*
             var route = daoRoute.route(startingLocationId = start, finalLocationId = final)
             if (route == null) {
                 route = daoRoute.addNewRoute(start, final)
-            }
+            }*/
 
-
+            /*
             for (i in 1..5) {
                 daoTrip.addNewTrip((1..5).random(), (1..4).random(), route!!.id, (1..5).random(), 27,  (1..15).random(), departureDate)
-            }
+            }*/
 
 
             val trips = daoTrip.trip(departureDate, start, final)

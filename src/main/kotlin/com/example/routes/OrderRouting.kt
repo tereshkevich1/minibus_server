@@ -25,5 +25,28 @@ fun Route.orderRouting() {
             }
         }
 
+        post("/add/{userId}/{tripId}/{numberTickets}/{status}/{departureStopId}/{arrivalStopId}") {
+            try {
+                val userId = call.parameters.getOrFail<Int>("userId").toInt()
+                val tripId = call.parameters.getOrFail<Int>("tripId").toInt()
+                val numberTickets = call.parameters.getOrFail<Int>("numberTickets").toInt()
+                val status = call.parameters.getOrFail<Int>("status").toInt()
+                val departureStopId = call.parameters.getOrFail<Int>("departureStopId").toInt()
+                val arrivalStopId = call.parameters.getOrFail<Int>("arrivalStopId").toInt()
+
+
+                val order = daoOrder.addNewOrder(userId, tripId, numberTickets, status, departureStopId, arrivalStopId)
+
+                if (order != null) {
+                    call.respond(HttpStatusCode.Created, "Order created")
+                } else {
+                    call.respond(HttpStatusCode.Conflict, "Failed to create order")
+                }
+
+            } catch (e: Exception) {
+                call.respond(HttpStatusCode.InternalServerError, "Internal server error: ${e.message}")
+            }
+        }
+
     }
 }

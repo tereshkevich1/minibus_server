@@ -4,12 +4,10 @@ import com.example.dao.DatabaseFactory.dbQuery
 import com.example.model.Order
 import com.example.model.Orders
 import com.example.model.Trips
-import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.minus
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.plus
-import org.jetbrains.exposed.sql.deleteWhere
-import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.update
 
 class OrderDAOImpl : OrderDAO {
 
@@ -35,11 +33,30 @@ class OrderDAOImpl : OrderDAO {
     override suspend fun addNewOrder(
         userId: Int,
         tripId: Int,
+        numberTickets: Int,
         status: Int,
-        tickets: Int,
-        stoppingPointsId: Int
-    ): Order? {
-        TODO("Not yet implemented")
+        departureStopId: Int,
+        arrivalStopId: Int
+    ): Order? = dbQuery {
+
+        if (Orders.select { (Orders.userId eq userId) and (Orders.tripId eq tripId) }.empty()) {
+            val updatedRows = Trips.update({ Trips.id eq tripId }) {
+                it[numberAvailableSeats] = numberAvailableSeats.minus(numberTickets)
+            }
+            if (updatedRows > 0) {
+
+                val insertStatement = Orders.insert {
+                    it[Orders.status] = status
+                    it[Orders.numberTickets] = numberTickets
+                    it[Orders.userId] = userId
+                    it[Orders.tripId] = tripId
+                    it[Orders.departureStopId] = departureStopId
+                    it[Orders.arrivalStopId] = arrivalStopId
+
+                }
+                insertStatement.resultedValues?.singleOrNull()?.let(::resultRowToOrder)
+            } else return@dbQuery null
+        } else return@dbQuery null
     }
 
     override suspend fun editOrder(id: Int, tripId: Int, status: Int, tickets: Int, stoppingPointsId: Int): Boolean {

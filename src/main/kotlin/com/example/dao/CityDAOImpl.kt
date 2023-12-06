@@ -14,6 +14,7 @@ class DAOCityImpl : CityDAO {
     )
 
     override suspend fun allCities(): List<City> = dbQuery {
+
         Cities.selectAll().map(::resultRowToCity)
     }
 

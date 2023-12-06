@@ -12,7 +12,8 @@ class UserDAOImpl : UserDAO {
         firstName = row[Users.firstName],
         lastName = row[Users.lastName],
         phoneNumber = row[Users.phoneNumber],
-        role = row[Users.role]
+        role = row[Users.role],
+        password = row[Users.password]
     )
 
     override suspend fun allUsers(): List<User> {
@@ -23,7 +24,7 @@ class UserDAOImpl : UserDAO {
         TODO("Not yet implemented")
     }
 
-    override suspend fun addNewUser(firstName: String, lastName: String, phoneNumber: String, role: Boolean): User? =
+    override suspend fun addNewUser(firstName: String, lastName: String, phoneNumber: String, role: Boolean, password: String): User? =
         dbQuery {
             val exists = Users.select { Users.phoneNumber eq phoneNumber }.any()
             if (!exists) {
@@ -32,6 +33,7 @@ class UserDAOImpl : UserDAO {
                     it[Users.lastName] = lastName
                     it[Users.phoneNumber] = phoneNumber
                     it[Users.role] = role
+                    it[Users.password] = password
                 }
                 insertStatement.resultedValues?.singleOrNull()?.let(::resultRowToUser)
             } else null
