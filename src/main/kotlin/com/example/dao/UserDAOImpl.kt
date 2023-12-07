@@ -24,7 +24,13 @@ class UserDAOImpl : UserDAO {
         TODO("Not yet implemented")
     }
 
-    override suspend fun addNewUser(firstName: String, lastName: String, phoneNumber: String, role: Boolean, password: String): User? =
+    override suspend fun addNewUser(
+        firstName: String,
+        lastName: String,
+        phoneNumber: String,
+        role: Boolean,
+        password: String
+    ): User? =
         dbQuery {
             val exists = Users.select { Users.phoneNumber eq phoneNumber }.any()
             if (!exists) {
@@ -50,6 +56,12 @@ class UserDAOImpl : UserDAO {
                 } > 0
             }
             return@dbQuery false
+        }
+
+    override suspend fun logInUser(phoneNumber: String, password: String): User? =
+        dbQuery {
+            Users.select { (Users.phoneNumber eq phoneNumber) and (Users.password eq password) }.singleOrNull()
+                ?.let(::resultRowToUser)
         }
 
     override suspend fun deleteUser(id: Int): Boolean {

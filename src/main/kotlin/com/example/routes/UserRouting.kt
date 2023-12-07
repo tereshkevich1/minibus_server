@@ -54,5 +54,22 @@ fun Route.userRouting() {
             }
 
         }
+        get("{phoneNumber}/{password}/logIn") {
+            try {
+                val phoneNumber = call.parameters.getOrFail("phoneNumber").let { number ->
+                    if (number.startsWith("+")) number else "+$number"
+                }
+                val password = call.parameters.getOrFail("password")
+                val user = daoUser.logInUser(phoneNumber, password)
+                if (user != null)
+                   call.respond(user)
+
+                else
+                    call.respond(HttpStatusCode.NotFound, "User not found")
+
+            } catch (e: Exception) {
+                call.respond(HttpStatusCode.InternalServerError, "Internal server error: ${e.message}")
+            }
+        }
     }
 }
