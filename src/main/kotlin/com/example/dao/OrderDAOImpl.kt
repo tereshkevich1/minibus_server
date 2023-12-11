@@ -39,7 +39,7 @@ class OrderDAOImpl : OrderDAO {
         arrivalStopId: Int
     ): Order? = dbQuery {
 
-        if (Orders.select { (Orders.userId eq userId) and (Orders.tripId eq tripId) }.empty()) {
+            if (Orders.select { (Orders.userId eq userId) and (Orders.tripId eq tripId) }.empty()) {
             val updatedRows = Trips.update({ Trips.id eq tripId }) {
                 it[numberAvailableSeats] = numberAvailableSeats.minus(numberTickets)
             }

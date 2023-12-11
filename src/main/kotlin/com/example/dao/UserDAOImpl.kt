@@ -64,6 +64,12 @@ class UserDAOImpl : UserDAO {
                 ?.let(::resultRowToUser)
         }
 
+    override suspend fun changePassword(userId: Int, password: String) : Boolean = dbQuery {
+        Users.update({Users.id eq userId}){
+            it[Users.password] = password
+        } > 0
+    }
+
     override suspend fun deleteUser(id: Int): Boolean {
         TODO("Not yet implemented")
     }

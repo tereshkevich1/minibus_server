@@ -9,4 +9,6 @@ interface UserDAO {
     suspend fun updateUser(id: Int, firstName: String,lastName: String, phoneNumber: String): Boolean
     suspend fun deleteUser(id: Int): Boolean
     suspend fun logInUser(phoneNumber: String, password: String): User?
+    suspend fun changePassword(userId: Int, password: String): Boolean
+
 }

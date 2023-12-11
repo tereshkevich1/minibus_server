@@ -44,7 +44,7 @@ fun Route.userRouting() {
                 val user = daoUser.addNewUser(firstName, lastName, phoneNumber, false, password)
 
                 if (user != null) {
-                    call.respond(user.id)
+                    call.respond(user)
                 } else {
                     call.respond(HttpStatusCode.Conflict, "Create failed")
                 }
@@ -66,6 +66,22 @@ fun Route.userRouting() {
 
                 else
                     call.respond(HttpStatusCode.NotFound, "User not found")
+
+            } catch (e: Exception) {
+                call.respond(HttpStatusCode.InternalServerError, "Internal server error: ${e.message}")
+            }
+        }
+
+        post ( "{id}/{password}/changePassword"){
+            try {
+                val id = call.parameters.getOrFail<Int>("id").toInt()
+                val password = call.parameters.getOrFail("password")
+
+                if (daoUser.changePassword(id,password)) {
+                    call.respond(HttpStatusCode.OK, "User not found")
+                } else {
+                    call.respond(HttpStatusCode.Conflict, "User not found")
+                }
 
             } catch (e: Exception) {
                 call.respond(HttpStatusCode.InternalServerError, "Internal server error: ${e.message}")
